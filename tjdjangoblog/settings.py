@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,13 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'blog.apps.BlogConfig',
+    'tjdjangoblog.apps.blog',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -50,12 +52,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'tjdjangoblog.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "tjdjangoblog/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,12 +65,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'app.wsgi.application'
+WSGI_APPLICATION = 'tjdjangoblog.wsgi.application'
 
 
 # Database
@@ -100,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = ('tjdjangoblog.apps.auth.oauth.IonOauth2',)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -122,3 +128,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+SOCIAL_AUTH_ION_SECRET = "QazMegtqLslB8hLrKMaXK6mWtJfkPeEn6CNnesOkKVHciHPnPYSdzyWlNE2UVZUCpYnYUA72ZX90d57KjcSLJwz2hZgjn9x85lKSkTaZTWclCP7yrMfWViciwzfdsGaL"
+SOCIAL_AUTH_ION_KEY = "zRav6xbWvNuIGv9I8SFFJ8jv4B14CtnAVP35fInY"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL='http://localhost:8000/complete/ion/'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+LOGIN_URL = "/login/"
+LOGIN_ERROR_URL = '/error'
+LOGIN_REDIRECT_URL = '/'
