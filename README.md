@@ -1,1 +1,3 @@
-# Understudy blog assignment
+# django blog
+
+pain
