@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p>Welcome to the index page!</p>
+                <p>Welcome to the index page!</p>
+                {% if is_authenticated %}
+                    <p>You are logged in as {{ user }}. <a href="{% url 'oauth:logout' %}">Logout</a></p>
 
-{% if is_authenticated %}
-    You are logged in. <a href="{% url 'oauth:logout' %}">Logout</a>
-{% else %}
-    <a href="{% url 'social:begin' 'ion' %}">Login with Ion</a>
-{% endif %}
+                    <p><a href="{% url 'blog:create' %}">Create a post</a></p>
+                {% else %}
+                    <a href="{% url 'social:begin' 'ion' %}">Login with Ion</a>
+                {% endif %}
+                <hr />
+                <h2>Latest posts:</h2>
+                {% for post in posts %}
+                    <div style="width:70%;text-align:start;border-style:solid;border-width:1px;padding:0px 20px 0px 20px;margin:10px">
+                        <h3>{{post.title}}</h3>
+                        <p>{{post.content}}</p>
+                    </div>
+                {% endfor %}
 {% endblock %}
+
