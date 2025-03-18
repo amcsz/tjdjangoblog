@@ -2,11 +2,11 @@
 
 ## Instructions to run
 Run the following commands to setup the environment:
-```
-$ chmod +x ./setup.sh
-$ ./setup.sh
+```bash
+chmod +x ./setup.sh
+./setup.sh
 ```
 To run the app, run:
-```
-$ python manage.py runserver
+```bash
+python manage.py runserver
 ```
