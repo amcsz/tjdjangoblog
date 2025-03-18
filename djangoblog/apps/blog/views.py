@@ -38,11 +38,13 @@ def post_view(request, id=-1):
         context['form'] = CommentForm
         context['post_id'] = id
         context['comments'] = PostComment.objects.filter(blogpost=post).select_related('comment').order_by('-comment__created_at')
+        context['is_authenticated'] = request.user.is_authenticated
     else:
         context['error'] = True
     if (context['error'] == True): return redirect("blog:index")
     return render(request, "post.html", context=context)
 
+@login_required
 def comment_view(request, id=-1):
     if request.method == 'POST' and id != -1:
         form = CommentForm(request.POST)
@@ -56,5 +58,4 @@ def comment_view(request, id=-1):
                 blogpost = parentpost
             )
             addcomment.save()
-            print(addcomment)
     return redirect(reverse('blog:post', kwargs={'id': id}))

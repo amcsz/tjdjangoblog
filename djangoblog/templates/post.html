@@ -7,11 +7,16 @@
                     <small>Posted by: {{post.op}}, {{post.created_at}}</small>
                     <p>{{post.content}}</p>
                 </div>
-                <form action="/comment/{{post_id}}/" method="post" style="display:flex;flex-direction: column;width:30%;">
-                    {% csrf_token %}
-                    {{ form }}
-                    <input type="submit" value="Submit">
-                </form>
+                {% if is_authenticated %}
+                    <form action="/comment/{{post_id}}/" method="post" style="display:flex;flex-direction: column;width:30%;">
+                        {% csrf_token %}
+                        {{ form }}
+                        <input type="submit" value="Submit">
+                    </form>
+                {% else %}
+                    <p>Sign in to leave a comment!</p>
+                {% endif %}
+                
                 <hr />
                 <h2 style="margin-bottom:0;">Comments:</h2>
                 <small>Comment are sorted by creation date.</small>
