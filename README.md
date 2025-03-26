@@ -8,5 +8,5 @@ chmod +x ./setup.sh
 ```
 To run the app, run:
 ```bash
-python djangoblog/manage.py runserver
+python manage.py runserver
 ```
