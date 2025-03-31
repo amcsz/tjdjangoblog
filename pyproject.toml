@@ -1,0 +1,11 @@
+[project]
+name = "tjdjangoblog"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "django>=5.1.7",
+    "ruff>=0.11.2",
+    "social-auth-app-django>=5.4.3",
+]
