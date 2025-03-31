@@ -1,9 +1,16 @@
 from django import forms
+from .models import BlogPost, Comment
+
+class BlogPostForm(forms.ModelForm):
+    class Meta:
+        model = BlogPost
+        fields = ['title', 'content']
 
 
-class CreateForm(forms.Form):
-    title = forms.CharField(label="Title of Post", max_length=200)
-    content = forms.CharField(widget=forms.Textarea)
-
-class CommentForm(forms.Form):
-    content = forms.CharField(widget=forms.Textarea(attrs={"rows": "5"}), label="Make a comment")
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Make a comment'})
+        }

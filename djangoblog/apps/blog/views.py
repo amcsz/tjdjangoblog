@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from ..oauth.decorators import login_required
 from .models import BlogPost, PostComment, Comment
-from .forms import CreateForm, CommentForm
+from .forms import BlogPostForm, CommentForm
 
 # Create your views here.
 def index_view(request):
@@ -17,45 +17,33 @@ def index_view(request):
 @login_required
 def create_view(request):
     if request.method == "POST":
-        form = CreateForm(request.POST)
+        form = BlogPostForm(request.POST)
         if (form.is_valid()):
-            title = form.cleaned_data["title"]
-            content = form.cleaned_data["content"]
-            op = str(request.user.username)
-            newpost = BlogPost(title=title, content=content, op=op)
-            newpost.save()
+            post = form.save(commit=False)
+            post.op = request.user.username
+            post.save()
             return redirect("blog:index")
-    else:
-        form = CreateForm
-    return render(request, "create.html", {"form" : CreateForm})
+    return render(request, "create.html", {"form" : BlogPostForm})
 
-def post_view(request, id=-1):
-    context = {}
+def post_view(request, id):
     post = get_object_or_404(BlogPost, pk=id)
-    if id != -1:
-        context['error'] = False;
-        context['post'] = post
-        context['form'] = CommentForm
-        context['post_id'] = id
-        context['comments'] = PostComment.objects.filter(blogpost=post).select_related('comment').order_by('-comment__created_at')
-        context['is_authenticated'] = request.user.is_authenticated
-    else:
-        context['error'] = True
-    if (context['error'] == True): return redirect("blog:index")
-    return render(request, "post.html", context=context)
+    context = {
+        "post": post,
+        "form": CommentForm,
+        "post_id": id,
+        "comments": PostComment.objects.filter(blogpost=post).select_related('comment').order_by('-comment__created_at'),
+        "is_authenticated": request.user.is_authenticated,
+    }
+    return render(request, "post.html", context)
 
 @login_required
-def comment_view(request, id=-1):
-    if request.method == 'POST' and id != -1:
+def comment_view(request, id):
+    post = get_object_or_404(BlogPost, pk=id)
+    if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
-            content = form.cleaned_data["content"]
-            parentpost = BlogPost.objects.get(pk=id)
-            newcomment = Comment(content=content, poster=request.user.username)
+            newcomment = form.save(commit=False)
+            newcomment.poster = request.user.username
             newcomment.save()
-            addcomment = PostComment(
-                comment = newcomment,
-                blogpost = parentpost
-            )
-            addcomment.save()
+            PostComment.objects.create(comment=newcomment, blogpost=post)
     return redirect(reverse('blog:post', kwargs={'id': id}))
