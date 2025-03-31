@@ -1,12 +1,14 @@
 # django blog
 
+This app requires [uv](https://docs.astral.sh/uv/) to run.
+
 ## Instructions to run
 Run the following commands to setup the environment:
 ```bash
-chmod +x ./setup.sh
-./setup.sh
+uv sync # installs packages
+uv run manage.py migrate # creates migrations
 ```
 To run the app, run:
 ```bash
-python manage.py runserver
+uv run manage.py runserver # runs the app
 ```
