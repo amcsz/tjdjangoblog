@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from ..oauth.decorators import login_required
-from .models import BlogPost, PostComment, Comment
+from .models import BlogPost, PostComment
 from .forms import BlogPostForm, CommentForm
 
 # Create your views here.

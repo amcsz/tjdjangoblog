@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 
 # Create your models here.
 class Comment(models.Model):
@@ -8,8 +7,10 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        if (len(self.content) < 10): return self.content
-        else: return self.content[:10]
+        if (len(self.content) < 10):
+            return self.content
+        else:
+            return self.content[:10]
 
 
 class BlogPost(models.Model):
