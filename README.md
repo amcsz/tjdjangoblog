@@ -12,3 +12,10 @@ To run the app, run:
 ```bash
 uv run manage.py runserver # runs the app
 ```
+
+## Using ruff
+
+Use ruff to lint over code:
+```bash
+uv run ruff check
+```
