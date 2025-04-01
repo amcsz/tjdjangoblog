@@ -1,6 +1,6 @@
 from celery import shared_task
 from .models import BlogPost, PostComment
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404 # type: ignore
 
 @shared_task
 def update_blog_times():

@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import render, redirect, get_object_or_404 # type: ignore
+from django.urls import reverse # type: ignore
 from ..oauth.decorators import login_required
 from .models import BlogPost, PostComment
 from .forms import BlogPostForm, CommentForm
-from django.utils.timezone import now
-from humanize import precisedelta
+from django.utils.timezone import now # type: ignore
+from humanize import precisedelta # type: ignore
 from .tasks import update_blog_times, update_time_specific, update_comment_times
 
 # Create your views here.

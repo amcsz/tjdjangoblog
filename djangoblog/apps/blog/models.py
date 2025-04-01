@@ -1,6 +1,6 @@
-from django.db import models
-from django.utils.timezone import now
-import humanize
+from django.db import models # type: ignore
+from django.utils.timezone import now # type: ignore
+import humanize # type: ignore
 
 def humanize_time_difference(time):
     diff = now() - time
