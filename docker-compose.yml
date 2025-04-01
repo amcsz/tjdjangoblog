@@ -1,0 +1,11 @@
+services:
+    django:
+        container_name: blog_django
+        build: .
+        ports:
+            - "8000:8000"
+    redis:
+        container_name: blog_redis
+        image: redis:latest
+        expose:
+            - "6379"
