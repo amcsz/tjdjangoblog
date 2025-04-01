@@ -1,7 +1,6 @@
 from django.db import models
-from humanize import precisedelta
 from django.utils.timezone import now
-
+import humanize
 
 def humanize_time_difference(time):
     diff = now() - time
