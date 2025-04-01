@@ -2,13 +2,22 @@ services:
     django:
         container_name: blog_django
         image: django_image
-        build: .
+        build:
+          context: .
+          dockerfile: Dockerfile
+        entrypoint:
+          [
+            "/bin/sh",
+            "-c",
+            "git config --global --add safe.directory /djangoblog && \
+            /bin/sh entrypoint.sh"
+          ]
         ports:
             - "8000:8000"
         networks:
             - blog_net
         volumes:
-            - ./:/djangoblog:z
+            - ./:/djangoblog
     redis:
         container_name: blog_redis
         image: redis:latest
@@ -31,7 +40,7 @@ services:
         depends_on:
             - django
         volumes:
-            - ./:/djangoblog:z
+            - ./:/djangoblog
     celerybeat:
         container_name: blog_celerybeat
         image: django_image
@@ -47,7 +56,7 @@ services:
         depends_on:
             - django
         volumes:
-            - ./:/djangoblog:z
+            - ./:/djangoblog
 
 
 networks:

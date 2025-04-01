@@ -5,6 +5,7 @@ from .models import BlogPost, PostComment
 from .forms import BlogPostForm, CommentForm
 from django.utils.timezone import now
 from humanize import precisedelta
+from .tasks import update_blog_times, update_time_specific, update_comment_times
 
 # Create your views here.
 def index_view(request):
@@ -14,6 +15,7 @@ def index_view(request):
         "posts": list(posts),
         "user": request.user
     }
+    update_blog_times.delay()
     return render(request, "index.html", context)
 
 @login_required
@@ -31,6 +33,8 @@ def create_view(request):
 
 def post_view(request, id):
     post = get_object_or_404(BlogPost, pk=id)
+    update_time_specific(post_pk=id)
+    update_comment_times(post_pk=id)
     context = {
         "post": post,
         "form": CommentForm,
@@ -49,5 +53,6 @@ def comment_view(request, id):
             newcomment = form.save(commit=False)
             newcomment.poster = request.user.username
             newcomment.save()
+            update_comment_times(id)
             PostComment.objects.create(comment=newcomment, blogpost=post)
     return redirect(reverse('blog:post', kwargs={'id': id}))

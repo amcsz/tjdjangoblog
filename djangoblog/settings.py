@@ -148,9 +148,9 @@ CELERY_ACCEPT_CONTENT = ["json", "pickle"]
 CELERY_TASK_SERIALIZER = "pickle"
 
 CELERY_BEAT_SCHEDULE = {
-    "update_times": {
-        "task": "djangoblog.apps.blog.tasks.update_times",
-        "schedule": 30.0,
+    "update_blog_times": {
+        "task": "djangoblog.apps.blog.tasks.update_blog_times",
+        "schedule": crontab(),
         "args": (),
-    }
+    },
 }
