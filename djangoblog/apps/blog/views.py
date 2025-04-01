@@ -3,10 +3,12 @@ from django.urls import reverse
 from ..oauth.decorators import login_required
 from .models import BlogPost, PostComment
 from .forms import BlogPostForm, CommentForm
+from django.utils.timezone import now
+from humanize import precisedelta
 
 # Create your views here.
 def index_view(request):
-    posts = BlogPost.objects.order_by('-created_at').values('title', 'content', 'op', 'id', 'created_at')
+    posts = BlogPost.objects.order_by('-created_at').values('title', 'content', 'op', 'id', 'created_at', 'time_diff')
     context = {
         "is_authenticated": request.user.is_authenticated,
         "posts": list(posts),
@@ -21,6 +23,8 @@ def create_view(request):
         if (form.is_valid()):
             post = form.save(commit=False)
             post.op = request.user.username
+            post.save()
+            post.time_diff = precisedelta(now() - post.created_at) + " ago"
             post.save()
             return redirect("blog:index")
     return render(request, "create.html", {"form" : BlogPostForm})

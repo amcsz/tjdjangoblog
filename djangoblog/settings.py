@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 '''
 
 from pathlib import Path
+from celery.schedules import crontab
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -138,3 +139,18 @@ LOGIN_URL = "/login/ion/"
 # Put these in a seperate file in production
 SOCIAL_AUTH_ION_KEY='855DzibBSkSZAiyhe2zA71s9QPsJtORbSm4buVeA'
 SOCIAL_AUTH_ION_SECRET='M2IHhANYVLm7S2I4YXnUM2eQuLAxmopI0O5ZkGEpMHhYSiqoLl6t7nGYQfMe83jySC3UJJcTD8sOCFE11Cr1okg5sjMpXaoNKediU28XlVVfDy6QcERfR9Embc040u1P'
+
+
+CELERY_TIMEZONE = "America/New_York"
+CELERY_BROKER_URL = "redis://redis:6379/0"
+
+CELERY_ACCEPT_CONTENT = ["json", "pickle"]
+CELERY_TASK_SERIALIZER = "pickle"
+
+CELERY_BEAT_SCHEDULE = {
+    "update_times": {
+        "task": "djangoblog.apps.blog.tasks.update_times",
+        "schedule": 30.0,
+        "args": (),
+    }
+}

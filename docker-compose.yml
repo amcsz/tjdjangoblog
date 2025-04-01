@@ -1,11 +1,55 @@
 services:
     django:
         container_name: blog_django
+        image: django_image
         build: .
         ports:
             - "8000:8000"
+        networks:
+            - blog_net
+        volumes:
+            - ./:/djangoblog:z
     redis:
         container_name: blog_redis
         image: redis:latest
         expose:
             - "6379"
+        networks:
+            - blog_net
+    celery:
+        container_name: blog_celery
+        image: django_image
+        networks:
+            - blog_net
+        entrypoint:
+            [
+                "/bin/sh",
+                "-c",
+                "git config --global --add safe.directory /djangoblog && \
+                uv run celery --app djangoblog worker -l INFO --without-gossip --without-mingle --without-heartbeat -Ofair"
+            ]
+        depends_on:
+            - django
+        volumes:
+            - ./:/djangoblog:z
+    celerybeat:
+        container_name: blog_celerybeat
+        image: django_image
+        networks:
+            - blog_net
+        entrypoint:
+            [
+                "/bin/sh",
+                "-c",
+                "git config --global --add safe.directory /djangoblog && \
+                uv run celery --app djangoblog beat -l INFO"
+            ]
+        depends_on:
+            - django
+        volumes:
+            - ./:/djangoblog:z
+
+
+networks:
+  blog_net:
+    driver: bridge

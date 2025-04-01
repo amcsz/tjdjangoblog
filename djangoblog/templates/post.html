@@ -4,7 +4,7 @@
                 <a href="{% url 'blog:index' %}">Go back to home page</a>
                 <div style="width:70%;text-align:start;border-style:solid;border-width:1px;padding:0px 20px 0px 20px;margin:10px">
                     <h3 style="margin-bottom:0px;">{{post.title}}</h3>
-                    <small>Posted by: {{post.op}}, {{post.created_at}}</small>
+                    <small>Posted by: {{post.op}}, {{post.time_diff}}</small>
                     <p>{{post.content}}</p>
                 </div>
                 {% if is_authenticated %}
